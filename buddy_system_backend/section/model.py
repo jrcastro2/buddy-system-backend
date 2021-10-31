@@ -1,0 +1,17 @@
+"""Section models."""
+from buddy_system_backend.app import db
+from buddy_system_backend.database import PkModel
+
+
+class Section(PkModel):
+    __tablename__ = 'section'
+
+    name = db.Column(db.String)
+    template_id = db.Column(db.Integer, db.ForeignKey('template.id'),
+                            nullable=False)
+    tasks = db.relationship('Task', backref='section', lazy=True)
+
+    def __init__(self, name, template_id, tasks):
+        self.name = name
+        self.template_id = template_id
+        self.tasks = tasks
