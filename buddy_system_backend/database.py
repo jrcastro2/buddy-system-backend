@@ -1,7 +1,6 @@
 """Database module; the SQLAlchemy database object and DB-related utilities."""
 
-
-from buddy_system_backend.app import db
+from buddy_system_backend.extensions import db
 
 # Alias common SQLAlchemy names
 Column = db.Column

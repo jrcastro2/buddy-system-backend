@@ -1,6 +1,5 @@
 """Template models."""
-from buddy_system_backend.app import db
-from buddy_system_backend.database import PkModel
+from buddy_system_backend.database import PkModel, db
 from buddy_system_backend.db.relation_tables import team_template, \
     template_role
 

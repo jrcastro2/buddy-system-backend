@@ -1,6 +1,5 @@
 """Onboarding models."""
-from buddy_system_backend.app import db
-from buddy_system_backend.database import PkModel
+from buddy_system_backend.database import PkModel, db
 from buddy_system_backend.db.relation_tables import onboarding_training, \
     onboarding_user
 

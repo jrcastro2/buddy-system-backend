@@ -1,3 +1,5 @@
+"""Main application package."""
+
 from buddy_system_backend.module.model import Module
 from buddy_system_backend.onboarding.model import Onboarding
 from buddy_system_backend.role.model import Role

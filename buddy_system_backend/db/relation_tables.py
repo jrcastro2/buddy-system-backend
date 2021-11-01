@@ -1,4 +1,4 @@
-from buddy_system_backend.app import db
+from buddy_system_backend.database import db
 
 
 team_user = db.Table(

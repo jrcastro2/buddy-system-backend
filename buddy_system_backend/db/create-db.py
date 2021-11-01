@@ -1,4 +1,5 @@
-from buddy_system_backend.app import db
+from buddy_system_backend.app import app
+from buddy_system_backend.database import db
 from buddy_system_backend.module.model import Module
 from buddy_system_backend.onboarding.model import Onboarding
 from buddy_system_backend.role.model import Role
@@ -9,4 +10,6 @@ from buddy_system_backend.template.model import Template
 from buddy_system_backend.user.model import User
 from buddy_system_backend.training.model import Training
 
-db.create_all()
+with app.app_context():
+    db.init_app(app)
+    db.create_all()

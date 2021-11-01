@@ -1,6 +1,5 @@
 """Module models."""
-from buddy_system_backend.app import db
-from buddy_system_backend.database import PkModel
+from buddy_system_backend.database import PkModel, db
 
 
 class Module(PkModel):

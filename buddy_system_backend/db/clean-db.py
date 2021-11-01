@@ -1,4 +1,4 @@
-from buddy_system_backend.app import db
+from buddy_system_backend.database import db
 from buddy_system_backend.module.model import Module
 from buddy_system_backend.onboarding.model import Onboarding
 from buddy_system_backend.role.model import Role
