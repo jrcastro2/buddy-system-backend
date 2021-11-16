@@ -47,12 +47,13 @@ class Model(CRUDMixin, db.Model):
 
 class PkModel(Model):
     """Base model class that includes CRUD convenience methods.
-     plus adds a 'primary key' column named ``id``.
-     """
+    plus adds a 'primary key' column named ``id``.
+    """
 
     __abstract__ = True
-    id = Column(db.Integer, primary_key=True, autoincrement=True,
-                nullable=True)
+    id = Column(
+        db.Integer, primary_key=True, autoincrement=True, nullable=True
+    )
 
     @classmethod
     def get_by_id(cls, record_id):

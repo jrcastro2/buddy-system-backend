@@ -1,11 +1,17 @@
 """User views."""
-from flask import Blueprint, current_app, request, flash
+from flask import Blueprint, current_app, request, flash, jsonify
 from flask_login import login_user, login_required, logout_user
+from marshmallow import ValidationError
 
+from buddy_system_backend.errors import JSONSchemaValidationError
 from buddy_system_backend.extensions import login_manager
+from buddy_system_backend.user.api import get_and_validate_user
+from buddy_system_backend.user.decorators import is_admin
+from buddy_system_backend.user.errors import UserDoesNotExistError
 from buddy_system_backend.user.model import User
+from buddy_system_backend.user.schema import UserSchema, LoginSchema
 
-blueprint = Blueprint("public", __name__, static_folder="../static")
+users_blueprint = Blueprint("user", __name__)
 
 
 @login_manager.user_loader
@@ -14,29 +20,86 @@ def load_user(user_id):
     return User.get_by_id(int(user_id))
 
 
-@blueprint.route("/", methods=["GET", "POST"])
-def home():
-    """Home page."""
-    current_app.logger.info("Hello from the home page!")
-    user = User.query.all()[0]
-    if request.method == "POST":
-        login_user(user)
-        flash("You are logged in.", "success")
-        return "POST"
-    return "hey"
+@users_blueprint.errorhandler(ValidationError)
+def validation_error(error):
+    """Catch validation errors."""
+    return JSONSchemaValidationError(error=error).get_response()
 
 
-@blueprint.route("/test/")
-@login_required
-def test():
-    """Test."""
-    return "Test!"
+@users_blueprint.route("/login", methods=["POST"])
+def login():
+    """Login."""
+    request_data = request.get_json()
+    schema = LoginSchema()
+    user_dict = schema.load(request_data)
+    user = get_and_validate_user(user_dict)
+    login_user(user)
+    return "", 204
 
 
-@blueprint.route("/logout/")
+@users_blueprint.route("/logout/")
 @login_required
 def logout():
     """Logout."""
     logout_user()
-    flash("You are logged out.", "info")
-    return "BYE!"
+    return "", 204
+
+
+@users_blueprint.route("/users")
+@is_admin
+@login_required
+def list_users():
+    """Get all users."""
+    users = User.query.all()
+    schema = UserSchema(many=True)
+    return jsonify(schema.dump(users))
+
+
+@users_blueprint.route("/users/<int:user_id>")
+@login_required
+def get_user(user_id):
+    """Get user."""
+    user = User.get_by_id(user_id)
+    if not user:
+        raise UserDoesNotExistError(user_id)
+    schema = UserSchema()
+    return jsonify(schema.dump(user))
+
+
+@users_blueprint.route("/users", methods=["POST"])
+@login_required
+# TODO: Permissions
+def create_user():
+    """Create user."""
+    request_data = request.json
+    schema = UserSchema()
+    user = schema.load(request_data)
+    user_created = User.create(**user)
+    return jsonify(schema.dump(user_created))
+
+
+@users_blueprint.route("/users/<int:user_id>", methods=["DELETE"])
+@login_required
+# TODO: Permissions
+def delete_user(user_id):
+    """Delete user."""
+    user = User.get_by_id(user_id)
+    if not user:
+        raise UserDoesNotExistError(user_id)
+    user.delete()
+    return "", 204
+
+
+@users_blueprint.route("/users/<int:user_id>", methods=["PUT"])
+@login_required
+# TODO: Permissions
+def update_user(user_id):
+    """Update user."""
+    user = User.get_by_id(user_id)
+    if not user:
+        raise UserDoesNotExistError(user_id)
+    request_data = request.json
+    schema = UserSchema()
+    user_dict = schema.load(request_data)
+    user.update(**user_dict)
+    return jsonify(schema.dump(user))

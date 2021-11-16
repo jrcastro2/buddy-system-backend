@@ -1,5 +1,6 @@
 from buddy_system_backend.app import app
 from buddy_system_backend.database import db
+from buddy_system_backend.extensions import bcrypt
 from buddy_system_backend.module.model import Module
 from buddy_system_backend.role.model import Role
 from buddy_system_backend.section.model import Section
@@ -26,12 +27,13 @@ with app.app_context():
         Role.save(rol)
 
     # Create and save users
+    password = bcrypt.generate_password_hash("123456").decode("utf8")
     users = [
-        User(name="Javier", password="123456", email="javier@test.com"),
-        User(name="Miguel", password="123456", email="miguel@test.com"),
-        User(name="Jose", password="123456", email="jose@test.com"),
-        User(name="Luis", password="123456", email="luis@test.com"),
-        User(name="Jesus", password="123456", email="jesus@test.com"),
+        User(username="Javier", _password=password, email="javier@test.com"),
+        User(username="Miguel", _password=password, email="miguel@test.com"),
+        User(username="Jose", _password=password, email="jose@test.com"),
+        User(username="Luis", _password=password, email="luis@test.com"),
+        User(username="Jesus", _password=password, email="jesus@test.com"),
     ]
 
     for user in users:
@@ -39,10 +41,18 @@ with app.app_context():
 
     # Create and save trainings
     trainings = [
-        Training(name="IT", description=lorem.paragraph(), modules=[], teams=[]),
-        Training(name="CDS", description=lorem.paragraph(), modules=[], teams=[]),
-        Training(name="REAN", description=lorem.paragraph(), modules=[], teams=[]),
-        Training(name="RDM", description=lorem.paragraph(), modules=[], teams=[])
+        Training(
+            name="IT", description=lorem.paragraph(), modules=[], teams=[]
+        ),
+        Training(
+            name="CDS", description=lorem.paragraph(), modules=[], teams=[]
+        ),
+        Training(
+            name="REAN", description=lorem.paragraph(), modules=[], teams=[]
+        ),
+        Training(
+            name="RDM", description=lorem.paragraph(), modules=[], teams=[]
+        ),
     ]
 
     for training in trainings:
@@ -50,14 +60,38 @@ with app.app_context():
 
     # Create and save templates
     templates = [
-        Template(name="IT", description=lorem.paragraph(), teams=[], roles=[],
-                 onboardings=[], sections=[]),
-        Template(name="CDS", description=lorem.paragraph(), teams=[], roles=[],
-                 onboardings=[], sections=[]),
-        Template(name="REANA", description=lorem.paragraph(), teams=[], roles=[],
-                 onboardings=[], sections=[]),
-        Template(name="RDM", description=lorem.paragraph(), teams=[], roles=[],
-                 onboardings=[], sections=[])
+        Template(
+            name="IT",
+            description=lorem.paragraph(),
+            teams=[],
+            roles=[],
+            onboardings=[],
+            sections=[],
+        ),
+        Template(
+            name="CDS",
+            description=lorem.paragraph(),
+            teams=[],
+            roles=[],
+            onboardings=[],
+            sections=[],
+        ),
+        Template(
+            name="REANA",
+            description=lorem.paragraph(),
+            teams=[],
+            roles=[],
+            onboardings=[],
+            sections=[],
+        ),
+        Template(
+            name="RDM",
+            description=lorem.paragraph(),
+            teams=[],
+            roles=[],
+            onboardings=[],
+            sections=[],
+        ),
     ]
 
     for template in templates:
@@ -65,12 +99,21 @@ with app.app_context():
 
     # Create and save teams
     teams = [
-        Team(name="IT", description=lorem.paragraph(), onboardings=[], users=[]),
-        Team(name="CDS", description=lorem.paragraph(), onboardings=[], users=[]),
         Team(
-            name="REANA", description=lorem.paragraph(), onboardings=[], users=[]
+            name="IT", description=lorem.paragraph(), onboardings=[], users=[]
         ),
-        Team(name="RDM", description=lorem.paragraph(), onboardings=[], users=[])
+        Team(
+            name="CDS", description=lorem.paragraph(), onboardings=[], users=[]
+        ),
+        Team(
+            name="REANA",
+            description=lorem.paragraph(),
+            onboardings=[],
+            users=[],
+        ),
+        Team(
+            name="RDM", description=lorem.paragraph(), onboardings=[], users=[]
+        ),
     ]
 
     for team in teams:
@@ -81,7 +124,7 @@ with app.app_context():
         Section(name="IT", template_id=templates[0].id, tasks=[]),
         Section(name="CDS", template_id=templates[0].id, tasks=[]),
         Section(name="REANA", template_id=templates[0].id, tasks=[]),
-        Section(name="RDM", template_id=templates[0].id, tasks=[])
+        Section(name="RDM", template_id=templates[0].id, tasks=[]),
     ]
 
     for section in sections:
@@ -89,14 +132,34 @@ with app.app_context():
 
     # Create and save tasks
     tasks = [
-        Task(name=lorem.sentence(), deadline=1, role_id=roles[0].id,
-             section_id=sections[0].id, subtasks=[]),
-        Task(name=lorem.sentence(), deadline=1, role_id=roles[0].id,
-             section_id=sections[0].id, subtasks=[]),
-        Task(name=lorem.sentence(), deadline=1, role_id=roles[0].id,
-             section_id=sections[0].id, subtasks=[]),
-        Task(name=lorem.sentence(), deadline=1, role_id=roles[0].id,
-             section_id=sections[0].id, subtasks=[]),
+        Task(
+            name=lorem.sentence(),
+            deadline=1,
+            role_id=roles[0].id,
+            section_id=sections[0].id,
+            subtasks=[],
+        ),
+        Task(
+            name=lorem.sentence(),
+            deadline=1,
+            role_id=roles[0].id,
+            section_id=sections[0].id,
+            subtasks=[],
+        ),
+        Task(
+            name=lorem.sentence(),
+            deadline=1,
+            role_id=roles[0].id,
+            section_id=sections[0].id,
+            subtasks=[],
+        ),
+        Task(
+            name=lorem.sentence(),
+            deadline=1,
+            role_id=roles[0].id,
+            section_id=sections[0].id,
+            subtasks=[],
+        ),
     ]
 
     for task in tasks:
@@ -104,14 +167,30 @@ with app.app_context():
 
     # Create and save modules
     modules = [
-        Module(name=lorem.sentence(), description=lorem.paragraph(),
-               content=lorem.text(), training_id=trainings[0].id),
-        Module(name=lorem.sentence(), description=lorem.paragraph(),
-               content=lorem.text(), training_id=trainings[0].id),
-        Module(name=lorem.sentence(), description=lorem.paragraph(),
-               content=lorem.text(), training_id=trainings[0].id),
-        Module(name=lorem.sentence(), description=lorem.paragraph(),
-               content=lorem.text(), training_id=trainings[0].id),
+        Module(
+            name=lorem.sentence(),
+            description=lorem.paragraph(),
+            content=lorem.text(),
+            training_id=trainings[0].id,
+        ),
+        Module(
+            name=lorem.sentence(),
+            description=lorem.paragraph(),
+            content=lorem.text(),
+            training_id=trainings[0].id,
+        ),
+        Module(
+            name=lorem.sentence(),
+            description=lorem.paragraph(),
+            content=lorem.text(),
+            training_id=trainings[0].id,
+        ),
+        Module(
+            name=lorem.sentence(),
+            description=lorem.paragraph(),
+            content=lorem.text(),
+            training_id=trainings[0].id,
+        ),
     ]
 
     for module in modules:
