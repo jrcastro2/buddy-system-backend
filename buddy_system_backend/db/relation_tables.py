@@ -3,8 +3,12 @@ from buddy_system_backend.database import db
 
 team_user = db.Table(
     "team_user",
-    db.Column("team_id", db.Integer, db.ForeignKey("team.id"), primary_key=True),
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
+    db.Column(
+        "team_id", db.Integer, db.ForeignKey("team.id"), primary_key=True
+    ),
+    db.Column(
+        "user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True
+    ),
 )
 
 training_team = db.Table(
@@ -15,12 +19,16 @@ training_team = db.Table(
         db.ForeignKey("training.id"),
         primary_key=True,
     ),
-    db.Column("team_id", db.Integer, db.ForeignKey("team.id"), primary_key=True),
+    db.Column(
+        "team_id", db.Integer, db.ForeignKey("team.id"), primary_key=True
+    ),
 )
 
 team_template = db.Table(
     "team_template",
-    db.Column("team_id", db.Integer, db.ForeignKey("team.id"), primary_key=True),
+    db.Column(
+        "team_id", db.Integer, db.ForeignKey("team.id"), primary_key=True
+    ),
     db.Column(
         "template_id",
         db.Integer,
@@ -54,7 +62,9 @@ template_role = db.Table(
         db.ForeignKey("template.id"),
         primary_key=True,
     ),
-    db.Column("role_id", db.Integer, db.ForeignKey("role.id"), primary_key=True),
+    db.Column(
+        "role_id", db.Integer, db.ForeignKey("role.id"), primary_key=True
+    ),
 )
 
 
@@ -66,6 +76,10 @@ onboarding_user = db.Table(
         db.ForeignKey("onboarding.id"),
         primary_key=True,
     ),
-    db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True),
-    db.Column("role_id", db.Integer, db.ForeignKey("role.id"), primary_key=True),
+    db.Column(
+        "user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True
+    ),
+    db.Column(
+        "role_id", db.Integer, db.ForeignKey("role.id"), primary_key=True
+    ),
 )

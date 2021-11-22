@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.module.errors import ModuleDoesNotExistError
 from buddy_system_backend.module.model import Module
 from buddy_system_backend.module.schema import ModuleSchema
+from buddy_system_backend.user.decorators import is_admin
 
 modules_blueprint = Blueprint("module", __name__)
 
@@ -28,6 +29,7 @@ def get_module(module_id):
 
 
 @modules_blueprint.route("/modules", methods=["POST"])
+@is_admin
 def create_module():
     """Create a module."""
     request_data = request.json
@@ -38,6 +40,7 @@ def create_module():
 
 
 @modules_blueprint.route("/modules/<int:module_id>", methods=["PUT"])
+@is_admin
 def update_module(module_id):
     """Update a module."""
     module = Module.get_by_id(module_id)
@@ -51,6 +54,7 @@ def update_module(module_id):
 
 
 @modules_blueprint.route("/modules/<int:module_id>", methods=["DELETE"])
+@is_admin
 def delete_module(module_id):
     """Delete a module."""
     module = Module.get_by_id(module_id)

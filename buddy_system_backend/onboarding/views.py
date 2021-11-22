@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.onboarding.errors import OnboardingDoesNotExistError
 from buddy_system_backend.onboarding.model import Onboarding
 from buddy_system_backend.onboarding.schema import OnboardingSchema
+from buddy_system_backend.user.decorators import is_admin
 
 onboardings_blueprint = Blueprint("onboarding", __name__)
 
@@ -28,6 +29,7 @@ def get_onboarding(onboarding_id):
 
 
 @onboardings_blueprint.route("/onboardings", methods=["POST"])
+@is_admin
 def create_onboarding():
     """Create a onboarding."""
     request_data = request.json
@@ -37,7 +39,10 @@ def create_onboarding():
     return jsonify(schema.dump(onboarding_created))
 
 
-@onboardings_blueprint.route("/onboardings/<int:onboarding_id>", methods=["PUT"])
+@onboardings_blueprint.route(
+    "/onboardings/<int:onboarding_id>", methods=["PUT"]
+)
+@is_admin
 def update_onboarding(onboarding_id):
     """Update a onboarding."""
     onboarding = Onboarding.get_by_id(onboarding_id)
@@ -50,7 +55,10 @@ def update_onboarding(onboarding_id):
     return jsonify(schema.dump(onboarding))
 
 
-@onboardings_blueprint.route("/onboardings/<int:onboarding_id>", methods=["DELETE"])
+@onboardings_blueprint.route(
+    "/onboardings/<int:onboarding_id>", methods=["DELETE"]
+)
+@is_admin
 def delete_onboarding(onboarding_id):
     """Delete a onboarding."""
     onboarding = Onboarding.get_by_id(onboarding_id)

@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.section.errors import SectionDoesNotExistError
 from buddy_system_backend.section.model import Section
 from buddy_system_backend.section.schema import SectionSchema
+from buddy_system_backend.user.decorators import is_admin
 
 sections_blueprint = Blueprint("section", __name__)
 
@@ -28,6 +29,7 @@ def get_section(section_id):
 
 
 @sections_blueprint.route("/sections", methods=["POST"])
+@is_admin
 def create_section():
     """Create a section."""
     request_data = request.json
@@ -38,6 +40,7 @@ def create_section():
 
 
 @sections_blueprint.route("/sections/<int:section_id>", methods=["PUT"])
+@is_admin
 def update_section(section_id):
     """Update a section."""
     section = Section.get_by_id(section_id)
@@ -51,6 +54,7 @@ def update_section(section_id):
 
 
 @sections_blueprint.route("/sections/<int:section_id>", methods=["DELETE"])
+@is_admin
 def delete_section(section_id):
     """Delete a section."""
     section = Section.get_by_id(section_id)

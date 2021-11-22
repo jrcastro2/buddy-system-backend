@@ -5,6 +5,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.role.errors import RoleDoesNotExistError
 from buddy_system_backend.role.model import Role
 from buddy_system_backend.role.schema import RoleSchema
+from buddy_system_backend.user.decorators import is_admin
 
 roles_blueprint = Blueprint("role", __name__)
 
@@ -28,6 +29,7 @@ def get_role(role_id):
 
 
 @roles_blueprint.route("/roles", methods=["POST"])
+@is_admin
 def create_role():
     """Create a role."""
     request_data = request.json
@@ -38,6 +40,7 @@ def create_role():
 
 
 @roles_blueprint.route("/roles/<int:role_id>", methods=["PUT"])
+@is_admin
 def update_role(role_id):
     """Update a role."""
     role = Role.get_by_id(role_id)
@@ -51,6 +54,7 @@ def update_role(role_id):
 
 
 @roles_blueprint.route("/roles/<int:role_id>", methods=["DELETE"])
+@is_admin
 def delete_role(role_id):
     """Delete a role."""
     role = Role.get_by_id(role_id)

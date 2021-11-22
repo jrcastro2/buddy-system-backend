@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.team.errors import TeamDoesNotExistError
 from buddy_system_backend.team.model import Team
 from buddy_system_backend.team.schema import TeamSchema
+from buddy_system_backend.user.decorators import is_admin
 
 teams_blueprint = Blueprint("team", __name__)
 
@@ -27,6 +28,7 @@ def get_team(team_id):
 
 
 @teams_blueprint.route("/teams", methods=["POST"])
+@is_admin
 def create_team():
     """Create a team."""
     request_data = request.json
@@ -37,6 +39,7 @@ def create_team():
 
 
 @teams_blueprint.route("/teams/<int:team_id>", methods=["PUT"])
+@is_admin
 def update_team(team_id):
     """Update a team."""
     team = Team.get_by_id(team_id)
@@ -50,6 +53,7 @@ def update_team(team_id):
 
 
 @teams_blueprint.route("/teams/<int:team_id>", methods=["DELETE"])
+@is_admin
 def delete_team(team_id):
     """Delete a team."""
     team = Team.get_by_id(team_id)

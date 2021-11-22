@@ -12,9 +12,13 @@ class Task(PkModel):
     parent_task = db.relationship(
         "Task", remote_side="Task.id", backref=db.backref("subtasks")
     )
-    section_id = db.Column(db.Integer, db.ForeignKey("section.id"), nullable=False)
+    section_id = db.Column(
+        db.Integer, db.ForeignKey("section.id"), nullable=False
+    )
 
-    def __init__(self, name, deadline, subtasks, role_id, section_id, task_id=None):
+    def __init__(
+        self, name, deadline, subtasks, role_id, section_id, task_id=None
+    ):
         self.name = name
         self.deadline = deadline
         self.subtasks = subtasks

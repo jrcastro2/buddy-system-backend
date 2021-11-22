@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.task.errors import TaskDoesNotExistError
 from buddy_system_backend.task.model import Task
 from buddy_system_backend.task.schema import TaskSchema
+from buddy_system_backend.user.decorators import is_admin
 
 tasks_blueprint = Blueprint("task", __name__)
 
@@ -27,6 +28,7 @@ def get_task(task_id):
 
 
 @tasks_blueprint.route("/tasks", methods=["POST"])
+@is_admin
 def create_task():
     """Create a task."""
     request_data = request.json
@@ -37,6 +39,7 @@ def create_task():
 
 
 @tasks_blueprint.route("/tasks/<int:task_id>", methods=["PUT"])
+@is_admin
 def update_task(task_id):
     """Update a task."""
     task = Task.get_by_id(task_id)
@@ -50,6 +53,7 @@ def update_task(task_id):
 
 
 @tasks_blueprint.route("/tasks/<int:task_id>", methods=["DELETE"])
+@is_admin
 def delete_task(task_id):
     """Delete a task."""
     task = Task.get_by_id(task_id)

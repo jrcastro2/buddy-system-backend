@@ -46,8 +46,8 @@ def logout():
 
 
 @users_blueprint.route("/users")
-@is_admin
 @login_required
+@is_admin
 def list_users():
     """Get all users."""
     users = User.query.all()
@@ -57,6 +57,7 @@ def list_users():
 
 @users_blueprint.route("/users/<int:user_id>")
 @login_required
+@is_admin
 def get_user(user_id):
     """Get user."""
     user = User.get_by_id(user_id)
@@ -68,7 +69,7 @@ def get_user(user_id):
 
 @users_blueprint.route("/users", methods=["POST"])
 @login_required
-# TODO: Permissions
+@is_admin
 def create_user():
     """Create user."""
     request_data = request.json
@@ -80,7 +81,7 @@ def create_user():
 
 @users_blueprint.route("/users/<int:user_id>", methods=["DELETE"])
 @login_required
-# TODO: Permissions
+@is_admin
 def delete_user(user_id):
     """Delete user."""
     user = User.get_by_id(user_id)
@@ -92,7 +93,7 @@ def delete_user(user_id):
 
 @users_blueprint.route("/users/<int:user_id>", methods=["PUT"])
 @login_required
-# TODO: Permissions
+@is_admin
 def update_user(user_id):
     """Update user."""
     user = User.get_by_id(user_id)

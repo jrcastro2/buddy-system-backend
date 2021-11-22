@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from buddy_system_backend.template.errors import TemplateDoesNotExistError
 from buddy_system_backend.template.model import Template
 from buddy_system_backend.template.schema import TemplateSchema
+from buddy_system_backend.user.decorators import is_admin
 
 templates_blueprint = Blueprint("template", __name__)
 
@@ -27,6 +28,7 @@ def get_template(template_id):
 
 
 @templates_blueprint.route("/templates", methods=["POST"])
+@is_admin
 def create_template():
     """Create a template."""
     request_data = request.json
@@ -37,6 +39,7 @@ def create_template():
 
 
 @templates_blueprint.route("/templates/<int:template_id>", methods=["PUT"])
+@is_admin
 def update_template(template_id):
     """Update a template."""
     template = Template.get_by_id(template_id)
@@ -50,6 +53,7 @@ def update_template(template_id):
 
 
 @templates_blueprint.route("/templates/<int:template_id>", methods=["DELETE"])
+@is_admin
 def delete_template(template_id):
     """Delete a template."""
     template = Template.get_by_id(template_id)
