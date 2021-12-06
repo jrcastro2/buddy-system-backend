@@ -2,25 +2,66 @@
 
 RESTful API for BuddySystem web application.
 
+## Requirements
+- [Git](https://git-scm.com/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+
+After installing the requirements you should be able to check the versions:
+```bash
+$ git --version
+git version 2.25.1
+
+$ docker --version
+Docker version 20.10.11, build dea9396
+
+$ docker-compose --version
+docker-compose version 1.29.2, build 5becea4c
+```
+
 ## How to install
 
-Install the required packages:
+Clone the repository:
 ```bash
-$ pip install -r requirements.txt 
-```
-Create the database:
-```bash
-$ python create-db.py
-# You can populate the DB with
-$  python populate-db.py
+$ cd <my directory e.g. myprojects>/
+$ git clone https://github.com/jrcastro2/buddy-system-backend 
+buddy-system-backend
+$ cd buddy-system-backend
 ```
 
-Run the server locally:
+## How to run
+
 ```bash
-$ ./scripts/run.sh
+$ cd <my directory e.g. myprojects>/buddy-system-backend
+$ docker-compose up
 ```
 
 ## How to use
+
+There is a CLI that provides some utilities:
+
+```bash
+# Make sure you are in the project directory
+$ cd <my directory e.g. myprojects>/buddy-system-backend
+# Create database
+$ docker-compose exec web python buddy_system_backend/cli.py create-db
+# Populate database with demo data
+$ docker-compose exec web python buddy_system_backend/cli.py populate-db
+# Clean database by deleting all the data
+$ docker-compose exec web python buddy_system_backend/cli.py clean-db
+# Destroy database
+$ docker-compose exec web python buddy_system_backend/cli.py destroy-db
+# Recreate database with demo data
+$ docker-compose exec web python buddy_system_backend/cli.py recreate-db
+```
+
+If you need a shell you can launch one with:
+```bash
+$ cd <my directory e.g. myprojects>/buddy-system-backend
+$ docker-compose exec web python buddy_system_backend/cli.py shell
+```
+
+## Endpoints
 
 ### Onboardings
 

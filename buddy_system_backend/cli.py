@@ -1,7 +1,11 @@
+import lorem
+from flask.cli import FlaskGroup
+
 from buddy_system_backend.app import app
 from buddy_system_backend.database import db
 from buddy_system_backend.extensions import bcrypt
 from buddy_system_backend.module.model import Module
+from buddy_system_backend.onboarding.model import Onboarding
 from buddy_system_backend.role.model import Role
 from buddy_system_backend.section.model import Section
 from buddy_system_backend.task.model import Task
@@ -9,11 +13,12 @@ from buddy_system_backend.team.model import Team
 from buddy_system_backend.template.model import Template
 from buddy_system_backend.training.model import Training
 from buddy_system_backend.user.model import User
-import lorem
 
-with app.app_context():
-    db.init_app(app)
+cli = FlaskGroup(app)
 
+
+def _create_demo_data():
+    """Create demo data."""
     # Create and save roles
     roles = [
         Role(name="Buddy Manager"),
@@ -31,7 +36,8 @@ with app.app_context():
     users = [
         User(username="Javier", _password=password, email="javier@test.com"),
         User(username="Miguel", _password=password, email="miguel@test.com"),
-        User(username="Jose", _password=password, email="jose@test.com"),
+        User(username="Jose", _password=password, email="jose@test.com",
+             is_admin=True),
         User(username="Luis", _password=password, email="luis@test.com"),
         User(username="Jesus", _password=password, email="jesus@test.com"),
     ]
@@ -195,3 +201,52 @@ with app.app_context():
 
     for module in modules:
         Module.save(module)
+
+
+@cli.command("create-db")
+def create_db():
+    """Creates the database."""
+    db.init_app(app)
+    db.create_all()
+    db.session.commit()
+
+
+@cli.command("clean-db")
+def clean_db():
+    """Clean all the data in the database."""
+    db.session.query(Task).delete()
+    db.session.query(Role).delete()
+    db.session.query(Module).delete()
+    db.session.query(Onboarding).delete()
+    db.session.query(Section).delete()
+    db.session.query(Template).delete()
+    db.session.query(Team).delete()
+    db.session.query(Training).delete()
+    db.session.query(User).delete()
+    db.session.commit()
+
+
+@cli.command("destroy-db")
+def destroy_db():
+    """Destroy the database."""
+    db.drop_all()
+    db.session.commit()
+
+
+@cli.command("populate-db")
+def populate_db():
+    """Populates database with demo data."""
+    _create_demo_data()
+
+
+@cli.command("recreate-db")
+def recreate_db():
+    """Recreate the database with the demo data."""
+    db.drop_all()
+    db.create_all()
+    _create_demo_data()
+    db.session.commit()
+
+
+if __name__ == "__main__":
+    cli()
