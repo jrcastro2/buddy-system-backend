@@ -30,6 +30,18 @@ class InvalidPasswordError(RESTException):
         )
 
 
+class ConfirmationPasswordError(RESTException):
+    """Confirmation of password failed ."""
+
+    code = 404
+    """HTTP Status code."""
+
+    def __init__(self, **kwargs):
+        """Initialize exception."""
+        super(RESTException, self).__init__(**kwargs)
+        self.description = "Password and confirmation password do not match."
+
+
 class UserNotActivatedError(RESTException):
     """User is not activated."""
 

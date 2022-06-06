@@ -3,8 +3,8 @@ import logging
 import sys
 
 from flask import Flask
-
-from buddy_system_backend.extensions import db, login_manager
+from flask_cors import CORS
+from buddy_system_backend.extensions import db, login_manager, jwt
 from buddy_system_backend.module.views import modules_blueprint
 from buddy_system_backend.onboarding.views import onboardings_blueprint
 from buddy_system_backend.role.views import roles_blueprint
@@ -23,6 +23,8 @@ def create_app(config_object="buddy_system_backend.conf"):
     register_extensions(app)
     register_blueprints(app)
     configure_logger(app)
+    CORS(app)
+    jwt.init_app(app)
     return app
 
 

@@ -5,7 +5,7 @@ services:
     build: .
     command: bash -c "./scripts/run.sh"
     volumes:
-      - ./:/usr/src/app/
+      - ./:/app
     ports:
       - 5000:5000
     env_file:
