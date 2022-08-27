@@ -1,6 +1,7 @@
 """Role views."""
 
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
 from buddy_system_backend.role.errors import RoleDoesNotExistError
 from buddy_system_backend.role.model import Role
@@ -18,6 +19,15 @@ def list_roles():
     return jsonify(schema.dump(roles))
 
 
+@roles_blueprint.route("/roles/search")
+def search_teams():
+    """Search roles."""
+    search_query = request.args.get('q')
+    teams = Role.get_by_name(search_query)
+    schema = RoleSchema(many=True)
+    return jsonify(schema.dump(teams))
+
+
 @roles_blueprint.route("/roles/<int:role_id>")
 def get_role(role_id):
     """Get a role."""
@@ -29,6 +39,7 @@ def get_role(role_id):
 
 
 @roles_blueprint.route("/roles", methods=["POST"])
+@jwt_required()
 @is_admin
 def create_role():
     """Create a role."""
@@ -40,6 +51,7 @@ def create_role():
 
 
 @roles_blueprint.route("/roles/<int:role_id>", methods=["PUT"])
+@jwt_required()
 @is_admin
 def update_role(role_id):
     """Update a role."""
@@ -54,6 +66,7 @@ def update_role(role_id):
 
 
 @roles_blueprint.route("/roles/<int:role_id>", methods=["DELETE"])
+@jwt_required()
 @is_admin
 def delete_role(role_id):
     """Delete a role."""

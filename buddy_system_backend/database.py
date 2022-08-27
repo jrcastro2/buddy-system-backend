@@ -66,3 +66,10 @@ class PkModel(Model):
         ):
             return cls.query.get(int(record_id))
         return None
+
+    @classmethod
+    def get_by_ids(cls, records_id):
+        """Get records by IDs."""
+        if isinstance(records_id, list):
+            return cls.query.filter(cls.id.in_(records_id)).all()
+        return None

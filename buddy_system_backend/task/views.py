@@ -1,5 +1,6 @@
 """Task views."""
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
 from buddy_system_backend.task.errors import TaskDoesNotExistError
 from buddy_system_backend.task.model import Task
@@ -28,6 +29,7 @@ def get_task(task_id):
 
 
 @tasks_blueprint.route("/tasks", methods=["POST"])
+@jwt_required()
 @is_admin
 def create_task():
     """Create a task."""
@@ -39,6 +41,7 @@ def create_task():
 
 
 @tasks_blueprint.route("/tasks/<int:task_id>", methods=["PUT"])
+@jwt_required()
 @is_admin
 def update_task(task_id):
     """Update a task."""
@@ -53,6 +56,7 @@ def update_task(task_id):
 
 
 @tasks_blueprint.route("/tasks/<int:task_id>", methods=["DELETE"])
+@jwt_required()
 @is_admin
 def delete_task(task_id):
     """Delete a task."""

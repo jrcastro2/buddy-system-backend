@@ -1,5 +1,6 @@
 """User models."""
 from flask_login import UserMixin
+from sqlalchemy import or_
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from buddy_system_backend.database import PkModel, db
@@ -28,6 +29,18 @@ class User(UserMixin, PkModel):
     def check_password(self, value):
         """Check password."""
         return bcrypt.check_password_hash(self._password, value)
+
+    @classmethod
+    def get_by_query(cls, username):
+        """Get records by username or email."""
+        if isinstance(username, str):
+            return cls.query.filter(
+                or_(
+                    cls.username.contains(username),
+                    cls.email.contains(username)
+                )
+            )
+        return None
 
     def __init__(self, username, _password, email, is_admin=False):
         self.username = username

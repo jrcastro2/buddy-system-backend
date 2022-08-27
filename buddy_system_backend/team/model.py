@@ -13,8 +13,15 @@ class Team(PkModel):
         "User", secondary=team_user, backref=db.backref("teams", lazy=True)
     )
 
-    def __init__(self, name, description, users, onboardings=[]):
+    def __init__(self, name, description, users=[], onboardings=[]):
         self.name = name
         self.description = description
         self.onboardings = onboardings
         self.users = users
+
+    @classmethod
+    def get_by_name(cls, name):
+        """Get records by name."""
+        if isinstance(name, str):
+            return cls.query.filter(cls.name.contains(name))
+        return None

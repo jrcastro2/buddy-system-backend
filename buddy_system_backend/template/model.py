@@ -16,7 +16,14 @@ class Template(PkModel):
     onboardings = db.relationship("Onboarding", backref="template", lazy=True)
     sections = db.relationship("Section", backref="template", lazy=True)
 
-    def __init__(self, name, description, teams, roles, onboardings, sections):
+    @classmethod
+    def get_by_name(cls, name):
+        """Get records by name."""
+        if isinstance(name, str):
+            return cls.query.filter(cls.name.contains(name))
+        return None
+
+    def __init__(self, name, description, teams=[], roles=[], sections=[], onboardings=[]):
         self.name = name
         self.description = description
         self.teams = teams

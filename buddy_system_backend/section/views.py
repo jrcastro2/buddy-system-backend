@@ -1,6 +1,7 @@
 """Section views."""
 
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
 from buddy_system_backend.section.errors import SectionDoesNotExistError
 from buddy_system_backend.section.model import Section
@@ -29,6 +30,7 @@ def get_section(section_id):
 
 
 @sections_blueprint.route("/sections", methods=["POST"])
+@jwt_required()
 @is_admin
 def create_section():
     """Create a section."""
@@ -40,6 +42,7 @@ def create_section():
 
 
 @sections_blueprint.route("/sections/<int:section_id>", methods=["PUT"])
+@jwt_required()
 @is_admin
 def update_section(section_id):
     """Update a section."""
@@ -54,6 +57,7 @@ def update_section(section_id):
 
 
 @sections_blueprint.route("/sections/<int:section_id>", methods=["DELETE"])
+@jwt_required()
 @is_admin
 def delete_section(section_id):
     """Delete a section."""

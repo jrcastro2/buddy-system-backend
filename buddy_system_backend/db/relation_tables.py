@@ -67,19 +67,19 @@ template_role = db.Table(
     ),
 )
 
-
-onboarding_user = db.Table(
-    "onboarding_user",
-    db.Column(
-        "onboarding_id",
-        db.Integer,
-        db.ForeignKey("onboarding.id"),
-        primary_key=True,
-    ),
-    db.Column(
-        "user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True
-    ),
-    db.Column(
-        "role_id", db.Integer, db.ForeignKey("role.id"), primary_key=True
-    ),
-)
+# TODO: DELETE all db and recreate it
+# onboarding_user = db.Table(
+#     "onboarding_user",
+#     db.Column(
+#         "onboarding_id",
+#         db.Integer,
+#         db.ForeignKey("onboarding.id"),
+#         primary_key=True,
+#     ),
+#     db.Column(
+#         "user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True
+#     ),
+#     db.Column(
+#         "role_id", db.Integer, db.ForeignKey("role.id"), primary_key=True
+#     ),
+# )

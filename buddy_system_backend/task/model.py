@@ -17,7 +17,7 @@ class Task(PkModel):
     )
 
     def __init__(
-        self, name, deadline, subtasks, role_id, section_id, task_id=None
+        self, name, role_id, section_id, subtasks=[], deadline=0, task_id=None
     ):
         self.name = name
         self.deadline = deadline

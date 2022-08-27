@@ -19,9 +19,10 @@ class UserSchema(Schema):
         required=True, error_messages={"required": "Email is required."}
     )
     password = fields.Str(
-        required=True, error_messages={"required": "Password is required."}
+        required=True, error_messages={"required": "Password is required."},
+        load_only=True
     )
-    is_admin = fields.Bool()
+    is_admin = fields.Bool(dump_only=True)
     active = fields.Bool(dump_only=True)
 
     @post_load

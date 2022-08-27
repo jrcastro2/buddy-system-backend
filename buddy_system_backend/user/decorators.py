@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask_login import current_user
+from flask_jwt_extended import current_user, jwt_required
 
 from buddy_system_backend.user.errors import (
     UserNotAdminError,

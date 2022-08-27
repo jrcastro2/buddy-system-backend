@@ -9,7 +9,7 @@ from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt, 
     get_jwt_identity, jwt_required, current_user
 
 from buddy_system_backend.errors import JSONSchemaValidationError
-from buddy_system_backend.extensions import login_manager, jwt
+from buddy_system_backend.extensions import login_manager, jwt, bcrypt
 from buddy_system_backend.user.api import get_and_validate_user, \
     validate_password
 from buddy_system_backend.user.decorators import is_admin
@@ -57,7 +57,6 @@ def logout():
 @users_blueprint.after_request
 def refresh_expiring_jwts(response):
     try:
-        print("refresging")
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
         target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
@@ -87,7 +86,6 @@ def create_token():
 @users_blueprint.route('/me')
 @jwt_required()
 def my_profile():
-    print(current_user)
     schema = MeSchema()
     return jsonify(schema.dump(current_user))
 
@@ -98,6 +96,15 @@ def my_profile():
 def list_users():
     """Get all users."""
     users = User.query.all()
+    schema = UserSchema(many=True)
+    return jsonify(schema.dump(users))
+
+
+@users_blueprint.route("/users/search")
+def search_users():
+    """Search users."""
+    search_query = request.args.get('q')
+    users = User.get_by_query(search_query)
     schema = UserSchema(many=True)
     return jsonify(schema.dump(users))
 
@@ -116,19 +123,20 @@ def get_user(user_id):
 
 
 @users_blueprint.route("/users", methods=["POST"])
-@login_required
-@is_admin
 def create_user():
     """Create user."""
     request_data = request.json
     schema = UserSchema()
     user = schema.load(request_data)
+    _password = bcrypt.generate_password_hash("123456").decode("utf8")
+    user["_password"] = _password
+    del user["password"]
     user_created = User.create(**user)
     return jsonify(schema.dump(user_created))
 
 
 @users_blueprint.route("/users/<int:user_id>", methods=["DELETE"])
-@login_required
+@jwt_required()
 @is_admin
 def delete_user(user_id):
     """Delete user."""
