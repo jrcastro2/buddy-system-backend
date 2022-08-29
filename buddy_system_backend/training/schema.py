@@ -11,3 +11,18 @@ class TrainingSchema(Schema):
     description = fields.Str()
     modules = fields.List(fields.Nested(ModuleSchema()))
     teams = fields.List(fields.Nested(TeamSchema()))
+
+
+class CustomModuleSchema(Schema):
+    id = fields.Integer()
+    name = fields.Str()
+    description = fields.Str()
+    content = fields.Str()
+    training_id = fields.Integer()
+
+
+class CustomTrainingSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    name = fields.Str()
+    description = fields.Str()
+    modules = fields.List(fields.Nested(CustomModuleSchema()))

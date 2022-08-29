@@ -12,7 +12,14 @@ class Training(PkModel):
     modules = db.relationship("Module", backref="training", lazy=True)
     teams = db.relationship("Team", secondary=training_team)
 
-    def __init__(self, name, description, modules, teams):
+    @classmethod
+    def get_by_name(cls, name):
+        """Get records by name."""
+        if isinstance(name, str):
+            return cls.query.filter(cls.name.contains(name))
+        return None
+
+    def __init__(self, name, description, modules=[], teams=[]):
         self.name = name
         self.description = description
         self.modules = modules

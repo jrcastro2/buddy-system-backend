@@ -44,7 +44,7 @@ def _create_demo_data():
 
     for user in users:
         User.save(user)
-
+"""
     # Create and save trainings
     trainings = [
         Training(
@@ -201,6 +201,7 @@ def _create_demo_data():
 
     for module in modules:
         Module.save(module)
+"""
 
 
 @cli.command("create-db")

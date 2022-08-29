@@ -9,7 +9,7 @@ class Module(PkModel):
     description = db.Column(db.String)
     content = db.Column(db.String)
     training_id = db.Column(
-        db.Integer, db.ForeignKey("training.id"), nullable=False
+        db.Integer, db.ForeignKey("training.id"), nullable=True
     )
 
     def __init__(self, name, description, content, training_id):
